@@ -158,6 +158,8 @@ for eff_x in ['v', 'z', 'vz', 'no']:
                                             name_col="index", 
                                             val_col=0)
     # add the simulated a-path here
+    param_df['subj_idx'] = param_df['subj_idx'].astype(np.int64)
+    a_df['subj_idx'] = a_df['subj_idx'].astype(np.int64)
     param_df = pd.merge(param_df, a_df[['subj_idx', 'a_path']], on='subj_idx')
 
     # save the data and param_df to files for later fitting
