@@ -37,13 +37,13 @@ if 'aeurai' in usr: # lisa/snellius
   mypath = '/home/aeurai/code/ddm_mediation'
 elif 'urai' in usr:  # mbp laptop
   mypath = '/Users/urai/Documents/code/ddm_mediation'
-
-t_start = time.time()
+print(mypath)
 
 #%% ============================================================= ##
 ## generate some artificial choice data with mediation variable
 ##  ============================================================= ##
 
+print('generating artificial choice data')
 # first, previous choices ('X')
 n_trials = int(1e4) # https://github.com/anne-urai/2019_Urai_choice-history-ddm/blob/master/simulations/1_ddm_rts.py#L84
 n_subj = 40
@@ -80,25 +80,25 @@ a_df['subj_idx'] = df.subj_idx.unique()
 a_df['a_path'] = a_path
 a_df
 
-#%% # DOES M DEPEND ON X (a-path)?
-import statsmodels.api as sm
-from patsy import dmatrices
+# #%% # DOES M DEPEND ON X (a-path)?
+# import statsmodels.api as sm
+# from patsy import dmatrices
 
-a_df['intercept'] = np.nan
-a_df['slope'] = np.nan
-for sjidx, (sj, sjdat) in enumerate(df.groupby(['subj_idx'])):
+# a_df['intercept'] = np.nan
+# a_df['slope'] = np.nan
+# for sjidx, (sj, sjdat) in enumerate(df.groupby(['subj_idx'])):
 
-  #fit linear regression model
-  y, X = dmatrices('M ~ 1 + X', 
-                   data=sjdat, return_type='dataframe')
-  model = sm.OLS(y, X).fit()
-  a_df.loc[a_df.subj_idx == sj, 'intercept'] = model.params[0]
-  a_df.loc[a_df.subj_idx == sj, 'slope'] = model.params[1]
+#   #fit linear regression model
+#   y, X = dmatrices('M ~ 1 + X', 
+#                    data=sjdat, return_type='dataframe')
+#   model = sm.OLS(y, X).fit()
+#   a_df.loc[a_df.subj_idx == sj, 'intercept'] = model.params[0]
+#   a_df.loc[a_df.subj_idx == sj, 'slope'] = model.params[1]
 
-# # see the separation
-# g = sns.FacetGrid(data=df, col='subj_idx', col_wrap=5, hue='X')
-# g.map(sns.distplot, 'M')
-# sns.scatterplot(a_df.a_path, a_df.slope)
+# # # see the separation
+# # g = sns.FacetGrid(data=df, col='subj_idx', col_wrap=5, hue='X')
+# # g.map(sns.distplot, 'M')
+# # sns.scatterplot(a_df.a_path, a_df.slope)
 
 #%%
 ##  ============================================================= ##
@@ -108,11 +108,14 @@ for sjidx, (sj, sjdat) in enumerate(df.groupby(['subj_idx'])):
 # help(hddm.simulators.hddm_dataset_generators.simulator_h_c)
 # see https://hddm.readthedocs.io/en/latest/lan_tutorial.html#section-5-regressors 
 # forum request for bug: https://groups.google.com/g/hddm-users/c/bdKDkwuQ3tk
+print('using HDDMnn simulator to generate choices and RTs')
 
-for eff_x in ['v']: #, 'no']: #'z', 'vz', 'no']:
-  for eff_m in ['v']: #, 'no']: # 'z', 'vz', 'no']:
+for eff_x in ['v', 'z', 'vz', 'no']:
+  for eff_m in ['v', 'z', 'vz', 'no']:
 
-  # simulate a couple of datasets: where X/M affects v/z/nothing
+    t_start = time.time()
+
+    # simulate a couple of datasets: where X/M affects v/z/nothing
     regr_v = 'v ~ 1 + S'
     if 'v' in eff_x:
       regr_v = regr_v + ' + X'
@@ -166,7 +169,6 @@ for eff_x in ['v']: #, 'no']: #'z', 'vz', 'no']:
     data.to_csv('%s/data/data_df_X%s_M%s.csv'%(mypath, eff_x, eff_m))
     #files.download('data_df_X%s_M%s.csv'%(eff_x, eff_m))
     
-    
-elapsed = time.time() - t_start
-print('Elapsed time: %.2f seconds' % (elapsed))
+    elapsed = time.time() - t_start
+    print('Elapsed time: %.2f seconds' % (elapsed))
 

@@ -2,12 +2,14 @@
 # Anne Urai, 2022
 
 library("lavaan")
-library("lavaanPlot")
-library("semPlot")
+#library("lavaanPlot")
+#library("semPlot")
 set.seed(2021)
 
 # load data
 datapath <- '/Users/urai/Documents/code/ddm_mediation'
+datapath <- '/home/aeurai/code/ddm_mediation' # on lisa
+
 for (eff_x in list('v', 'z', 'no')) { 
   for (eff_m in list('v', 'z', 'no')){
 
@@ -47,6 +49,7 @@ for (eff_x in list('v', 'z', 'no')) {
       summ2$subj_idx <- subj
       mediation_results <- rbind(mediation_results, summ2) # append
       write.csv(mediation_results, sprintf("%s/data/fit_lavaan_X%s_M%s.csv", datapath, eff_x, eff_m)) # write at each iteration
+      print(sprintf("%s/data/fit_lavaan_X%s_M%s.csv", datapath, eff_x, eff_m))
     }
   }
 }
