@@ -16,7 +16,9 @@ source activate hddmnn_env  # for all installed packages
 
 # do something
 echo "starting python job"
-python generate_data.py --gres=gpu:<number>
+date
+
+python generate_data.py
 
 # fit with lavaan
 # module load R/4.0.5-foss-2020b
