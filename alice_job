@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # https://wiki.alice.universiteitleiden.nl/index.php?title=Running_jobs_on_ALICE
-#SBATCH -p gpu-short
-#SBATCH --gres=gpu:1
-#SBATCH -t 3:00:00 # maximum 5 days on cartesius
+#SBATCH -p testing # gpu-short
+# #SBATCH --gres=gpu:1
+#SBATCH -t 1:00:00 # maximum 5 days on cartesius
 #SBATCH -o /home/uraiae/jobs/slurm-%A_%a.out
 #SBATCH -e /home/uraiae/jobs/slurm-%A_%a.err
 #SBATCH --mail-user=a.e.urai@fsw.leidenuniv.nl # mail when done
