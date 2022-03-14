@@ -73,7 +73,7 @@ for eff_x in ['v', 'z',  'no']:
             if s not in df.columns:
                 df[s] = np.nan
     
-        g = sns.PairGrid(data=df, y_vars=['lav_direct', 'lav_indirect'],
+        g = sns.PairGrid(data=df, y_vars=['lav_s0', 'lav_direct', 'lav_indirect', 'lav_total'],
                    x_vars=sim_vars)
         g.map(corrfunc)
         plt.suptitle('X affects %s, M affects %s'%(eff_x, eff_m))
