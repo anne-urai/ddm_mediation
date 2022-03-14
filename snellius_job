@@ -6,19 +6,18 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --partition=thin
-#SBATCH -o /home/aeurai/jobs/slurm-%A_%a.out
-#SBATCH -e /home/aeurai/jobs/slurm-%A_%a.err
-#SBATCH --mail-user=a.e.urai@fsw.leidenuniv.nl # mail when done
-#SBATCH --mail-type=END,FAIL # mail when done
+
+# skip these options for now
+# SBATCH -o /home/aeurai/jobs/slurm-%A_%a.out
+# SBATCH -e /home/aeurai/jobs/slurm-%A_%a.err
+# SBATCH --mail-user=a.e.urai@fsw.leidenuniv.nl # mail when done
+# SBATCH --mail-type=END,FAIL # mail when done
 
 # load necessary modules for correct environment
 module load 2021
 module load Anaconda3/2021.05
 source activate hddmnn_env 
 
-# determine how many parallel jobs we can run on this node
-ncores=`sara-get-num-cores`
-((ncores -= 1)) # subtract one for system processes
-echo "ncores = $ncores"
-
+# do something
+echo "starting python job"
 python generate_data.py
