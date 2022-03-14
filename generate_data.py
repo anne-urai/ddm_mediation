@@ -14,7 +14,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 # Data management
 import pandas as pd
 import numpy as np
-import pickle, os, time
+import pickle, os, time, sys
 
 # Plotting
 import matplotlib.pyplot as plt
@@ -41,11 +41,14 @@ elif 'urai' in usr:  # mbp laptop
   mypath = '/Users/urai/Documents/code/ddm_mediation'
 print(mypath)
 
+# parse input args
+d_num = sys.argv[1] # not used atm
+
 #%% ============================================================= ##
 ## generate some artificial choice data with mediation variable
 ##  ============================================================= ##
 
-print('generating artificial choice data')
+print('generating artificial previous choice data')
 # first, previous choices ('X')
 n_trials = int(1e3) # https://github.com/anne-urai/2019_Urai_choice-history-ddm/blob/master/simulations/1_ddm_rts.py#L84
 n_subj = 30
@@ -112,13 +115,15 @@ a_df
 # forum request for bug: https://groups.google.com/g/hddm-users/c/bdKDkwuQ3tk
 print('using HDDMnn simulator to generate choices and RTs')
 
-for eff_x in ['no', 'v', 'z', 'vz']:
-  for eff_m in ['no', 'v', 'z', 'vz']:
+for eff_x in ['no', 'v']: #, 'z', 'vz']:
+  for eff_m in ['no', 'v']: #, 'z', 'vz']:
 
     t_start = time.time()
 
     # simulate a couple of datasets: where X/M affects v/z/nothing
     regr_v = 'v ~ 1 + S'
+    regr_cov = ['S']
+
     if 'v' in eff_x:
       regr_v = regr_v + ' + X'
     if 'v' in eff_m:
@@ -135,6 +140,11 @@ for eff_x in ['no', 'v', 'z', 'vz']:
           regr_v, '; ',
           regr_z)
 
+    # which covariates do we have?
+    regr_cov_z = [s for s in regr_z.split() if not s in ['z', '1', '~', '+']]
+    regr_cov_v = [s for s in regr_v.split() if not s in ['v', '1', '~', '+']]
+    regr_cov = set().union(regr_cov_v, regr_cov_z)
+
     # plug this into the simulator
     data, full_parameter_dict = hddm.simulators.hddm_dataset_generators.simulator_h_c(data = df, 
                                                                                   model = 'ddm',
@@ -142,10 +152,10 @@ for eff_x in ['no', 'v', 'z', 'vz']:
                                                                                   conditions = None, 
                                                                                   depends_on = None, 
                                                                                   regression_models = [regr_v, regr_z], 
-                                                                                  regression_covariates = ['S', 'X'],
+                                                                                  regression_covariates = regr_cov,
                                                                                   group_only = None,
                                                                                   group_only_regressors = False,
-                                                                                  fixed_at_default = None)
+                                                                                  fixed_at_default = ['t', 'a', 'z'])
 
     # export the parameter_dict into df
     # from https://github.com/anne-urai/MEG/blob/master/hddm_funcs_plot.py#L66
@@ -156,6 +166,8 @@ for eff_x in ['no', 'v', 'z', 'vz']:
             param_dict[key] = value
     param_dict
     param_df = pd.DataFrame.from_dict(param_dict, orient='index').reset_index()
+    param_df.to_csv('%s/data/paramfull_df_X%s_M%s.csv'%(mypath, eff_x, eff_m))
+
     param_df = hddm.utils.results_long2wide(param_df, 
                                             name_col="index", 
                                             val_col=0)
@@ -166,7 +178,6 @@ for eff_x in ['no', 'v', 'z', 'vz']:
 
     # save the data and param_df to files for later fitting
     # see https://colab.research.google.com/notebooks/io.ipynb#scrollTo=p2E4EKhCWEC5
-    
     param_df.to_csv('%s/data/param_df_X%s_M%s.csv'%(mypath, eff_x, eff_m))
     #files.download('param_df_X%s_M%s.csv'%(eff_x, eff_m))
 

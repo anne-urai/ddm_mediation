@@ -11,15 +11,11 @@
 # load necessary modules
 module load Miniconda3/4.9.2
 source activate hddmnn_env  # for all installed packages
+export PYTHONUNBUFFERED=TRUE # use -u to continually show output in logfile (unbuffered)
 
 # do something
 date; hostname
 
 echo "starting python job"
-export PYTHONUNBUFFERED=TRUE # use -u to continually show output in logfile (unbuffered)
-python generate_data.py 
+python generate_data.py -m $SLURM_ARRAY_TASK_ID # run the number of arrays thats specified
 date
-
-# fit with lavaan
-# module load R/4.0.5-foss-2020b
-# Rscript fit_lavaan.R
