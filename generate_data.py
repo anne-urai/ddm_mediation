@@ -35,6 +35,8 @@ import hddm
 usr = os.environ['USER']
 if 'aeurai' in usr: # lisa/snellius
   mypath = '/home/aeurai/code/ddm_mediation'
+elif 'uraiae' in usr: # alice
+  mypath = '/home/uraiae/code/ddm_mediation'
 elif 'urai' in usr:  # mbp laptop
   mypath = '/Users/urai/Documents/code/ddm_mediation'
 print(mypath)
@@ -110,8 +112,8 @@ a_df
 # forum request for bug: https://groups.google.com/g/hddm-users/c/bdKDkwuQ3tk
 print('using HDDMnn simulator to generate choices and RTs')
 
-for eff_x in ['v', 'z', 'vz', 'no']:
-  for eff_m in ['v', 'z', 'vz', 'no']:
+for eff_x in ['no', 'v', 'z', 'vz']:
+  for eff_m in ['no', 'v', 'z', 'vz']:
 
     t_start = time.time()
 

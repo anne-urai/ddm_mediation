@@ -8,7 +8,7 @@ set.seed(2021)
 
 # load data
 datapath <- '/Users/urai/Documents/code/ddm_mediation'
-datapath <- '/home/aeurai/code/ddm_mediation' # on lisa
+datapath <- '/home/uraiae/code/ddm_mediation' # on ALICE
 
 for (eff_x in list('v', 'z', 'no')) { 
   for (eff_m in list('v', 'z', 'no')){
