@@ -45,8 +45,8 @@ print(mypath)
 
 print('generating artificial choice data')
 # first, previous choices ('X')
-n_trials = int(1e4) # https://github.com/anne-urai/2019_Urai_choice-history-ddm/blob/master/simulations/1_ddm_rts.py#L84
-n_subj = 40
+n_trials = int(1e3) # https://github.com/anne-urai/2019_Urai_choice-history-ddm/blob/master/simulations/1_ddm_rts.py#L84
+n_subj = 30
 df = pd.DataFrame(np.random.choice([-1,1], (n_trials*n_subj, 2)), columns=list('XS')) 
 
 # make sure we have subj_idx and trial_idx
